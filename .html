@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Calculator</title>
+<style>
 
+	body {
+		display: table;
+		margin: auto;
+		background-image: url("./math.jpg");
+	}
+	
+	h1 {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: firebrick;
+		margin-bottom: 2px;
+		margin-top: 15px;
+	}
+	
+	h2 {
+		display: flex;
+		justify-content: right;
+		font-size: 10px;
+		color: firebrick;
+		margin-right: 10px;
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+	
+	button {
+		width: 68px;
+		height: 68px;
+		border-radius: 8px;
+		transition-duration: 0.2s;
+		background-color: aliceblue;
+	}
+	
+	button:hover {
+		background-color: gainsboro;
+	}
+	
+	button:active {
+		background-color: lightslategray;
+		border-color: firebrick;
+	}
+	
+	.facePad {
+		font-size: 15px;
+		font-weight: bold;
+		transition-duration: 0.1s;
+	}
+	
+	.facePad:hover {
+		font-size: 17px;
+	}
+	
+	.facePadClick:active {
+		font-size: 19px;
+		color: crimson;
+	}
+	
+	.title {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	
+	.outerShell {
+		display: flex;
+		flex-direction: column;
+		width: 290px;
+		border: 7px solid darkslategray;
+		border-radius: 13px;
+		background-color: whitesmoke;
+	}
+	
+	.numberField {
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-end;
+		height: 60px;
+		margin-top: 20px;
+		margin-bottom: 15px;
+		margin-left: 10px;
+		margin-right: 10px;
+		border: 3px solid steelblue;
+		border-radius: 6px;
+		background-color: palegreen;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	
+	.operands {
+		display: flex;
+		justify-content: space-around;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-bottom: 2px;
+	}
+	
+	.\31 234 {
+		display: flex;
+		justify-content: space-around;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+	
+	.\35 678 {
+		display: flex;
+		justify-content: space-around;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+	
+	.\39 0\.c {
+		display: flex;
+		justify-content: space-around;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-top: 2px;
+		margin-bottom: 30px;
+	}
+</style>
+<body>
+	<div class='outerShell'>
+		<h1>CALCULATOR
+			<h2>by waltonklavierspieler @github</h2>
+		</h1>
+		<div class='numberField'>
+			<p id="input">Waiting user input...</p>
+		</div>
+		<hr />
+		<div class='operands'>
+			<button class='facePad facePadClick' id='add'>+</button>
+			<button class='facePad facePadClick' id='subtract'>-</button>
+			<button class='facePad facePadClick' id='multiply'>X</button>
+			<button class='facePad facePadClick' id='divide'>/</button>
+		</div>
+		<div class='1234'>
+			<button class='facePad facePadClick' id='1'>1</button>
+			<button class='facePad facePadClick' id='2'>2</button>
+			<button class='facePad facePadClick' id='3'>3</button>
+			<button class='facePad facePadClick' id='4'>4</button>
+		</div>
+		<div class='5678'>
+			<button class='facePad facePadClick' id='5'>5</button>
+			<button class='facePad facePadClick' id='6'>6</button>
+			<button class='facePad facePadClick' id='7'>7</button>
+			<button class='facePad facePadClick' id='8'>8</button>
+		</div>
+		<div class='90.c'>
+			<button class='facePad facePadClick' id='9'>9</button>
+			<button class='facePad facePadClick' id='0'>0</button>
+			<button class='facePad facePadClick' id='.'>.</button>
+			<button class='facePad facePadClick' id='C'>C</button>
+		</div>
+	</div>
+  <script src="calculator.js"></src>
+  </body>
+</head>
+</html>
