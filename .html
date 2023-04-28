@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Calculator</title>
+</head>
 <style>
 
 	body {
@@ -10,7 +11,7 @@
 		margin: auto;
 		background-image: url("./math.jpg");
 	}
-	
+
 	h1 {
 		display: flex;
 		justify-content: center;
@@ -19,7 +20,7 @@
 		margin-bottom: 2px;
 		margin-top: 15px;
 	}
-	
+
 	h2 {
 		display: flex;
 		justify-content: right;
@@ -29,7 +30,7 @@
 		margin-top: 0px;
 		margin-bottom: 0px;
 	}
-	
+
 	button {
 		width: 68px;
 		height: 68px;
@@ -37,37 +38,37 @@
 		transition-duration: 0.2s;
 		background-color: aliceblue;
 	}
-	
+
 	button:hover {
 		background-color: gainsboro;
 	}
-	
+
 	button:active {
 		background-color: lightslategray;
 		border-color: firebrick;
 	}
-	
+
 	.facePad {
 		font-size: 15px;
 		font-weight: bold;
 		transition-duration: 0.1s;
 	}
-	
+
 	.facePad:hover {
 		font-size: 17px;
 	}
-	
+
 	.facePadClick:active {
 		font-size: 19px;
 		color: crimson;
 	}
-	
+
 	.title {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
-	
+
 	.outerShell {
 		display: flex;
 		flex-direction: column;
@@ -76,7 +77,7 @@
 		border-radius: 13px;
 		background-color: whitesmoke;
 	}
-	
+
 	.numberField {
 		display: flex;
 		justify-content: space-around;
@@ -92,7 +93,7 @@
 		font-size: 20px;
 		font-weight: bold;
 	}
-	
+
 	.operands {
 		display: flex;
 		justify-content: space-around;
@@ -100,7 +101,7 @@
 		margin-right: 4px;
 		margin-bottom: 2px;
 	}
-	
+
 	.\31 234 {
 		display: flex;
 		justify-content: space-around;
@@ -109,7 +110,7 @@
 		margin-top: 2px;
 		margin-bottom: 2px;
 	}
-	
+
 	.\35 678 {
 		display: flex;
 		justify-content: space-around;
@@ -118,7 +119,7 @@
 		margin-top: 2px;
 		margin-bottom: 2px;
 	}
-	
+
 	.\39 0\.c {
 		display: flex;
 		justify-content: space-around;
@@ -137,7 +138,11 @@
 			<p id="input">Waiting user input...</p>
 		</div>
 		<hr />
-		<div class='operands'>
+		<div class='operands1'>
+			<button class='facePad facePadClick' id='C'>C</button>
+			<button class='facePad facePadClick' id='='>=</button>
+		</div>
+		<div class='operands2'>
 			<button class='facePad facePadClick' id='add'>+</button>
 			<button class='facePad facePadClick' id='subtract'>-</button>
 			<button class='facePad facePadClick' id='multiply'>X</button>
@@ -155,14 +160,13 @@
 			<button class='facePad facePadClick' id='7'>7</button>
 			<button class='facePad facePadClick' id='8'>8</button>
 		</div>
-		<div class='90.c'>
+		<div class='90.!'>
 			<button class='facePad facePadClick' id='9'>9</button>
 			<button class='facePad facePadClick' id='0'>0</button>
 			<button class='facePad facePadClick' id='.'>.</button>
-			<button class='facePad facePadClick' id='C'>C</button>
+			<button class='facePad facePadClick' id='!'>!</button>
 		</div>
 	</div>
-  <script src="calculator.js"></src>
-  </body>
-</head>
+<script src="calculator.js"></script>
+</body>
 </html>
