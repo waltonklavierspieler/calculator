@@ -1,4 +1,3 @@
-//arithmetic functions:
 function add(x, y) {
 	return x + y;
 }
@@ -42,9 +41,8 @@ function factorial (num) {
 	}
 	return result;
 }
-
 //operand function
-function operate (operand, x, y) {
+function evaluate (operand, x, y) {
 	return operand(x, y);
 }
 
@@ -63,21 +61,132 @@ check if int or if operand; if so, append as string to firstInt;
 			input to operate function
 
 update every output to the display
-
-
-
 */
 
 //three variables to store the different input integers and the operand;
 var floatCheck = false;
+var operatorCheck = false;
 var firstInt = undefined;
 var secondInt = undefined;
 var operator = undefined;
+
+const calculatorButtons = document.querySelectorAll('.facePad');
+calculatorButtons.forEach(function (key) {
+	key.addEventListener('click', function() {
+		const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract'];
+		const statementsArray = ['Input a number first.', 'ERROR: two operands in a row.', 'Must input a number first.'];
+		//check for display === whatever possible statements
+		if (statementsArray.includes(document.getElementById("input").innerHTML)) {
+			clearCalculator();
+		}
+		//check for clear button
+		if (key.id === 'C') {
+			clearCalculator();
+			return
+		}
+		//check for = button
+		if (key.id === '=') {
+			if (firstInt === undefined) {
+				document.getElementById("input").innerHTML = 'Input a number first.';
+				setTimeout(clearCalculator, 5000);
+				return
+			}
+			if (secondInt === undefined) {
+				return firstInt;
+				setTimeout(clearCalculator, 5000);
+				return
+			} else {
+				if (floatCheck) {
+					var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
+					document.getElementById("input").innerHTML = result;
+					setTimeout(clearCalculator, 15000);
+				} else {
+					var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
+					document.getElementById("input").innerHTML = result;
+					setTimeout(clearCalculator, 15000);
+				}
+				return;
+			}
+		}
+		//cases for operand input
+		if (operatorArray.includes(key.id)) {
+			if (operatorCheck) {
+				document.getElementById("input").innerHTML = 'ERROR: two operands in a row.';
+				setTimeout(clearCalculator, 5000);
+				return
+			}
+			if (firstInt === undefined) {
+				document.getElementById("input").innerHTML = 'Must input a number first.';
+				setTimeout(clearCalculator, 5000);
+				return;
+			}
+			operatorCheck = true;
+			operator = key.id;
+			console.log("Operator is " + operator + "and the type is " + typeof(operator));
+			floatCheck = false;
+			displayUpdate(key.innerHTML);
+			return
+		}
+		//cases for integer input
+		if (typeof(parseInt(key.id)) === 'number') {
+			//in case of !operatorCheck
+			if (!operatorCheck) {
+				firstIntUpdate(key.id);
+				displayUpdate(key.id);
+			} else {
+				secondIntUpdate(key.id);
+				displayUpdate(key.id);
+			}
+		}
+		//float check
+		if (key.id === '.') {
+			if (floatCheck === true) {
+				document.getElementById("input").innerHTML = "Too many decimals."
+				setTimeout(clearCalculator, 5000);
+				return
+			}
+			if (!operatorCheck) {
+				firstIntUpdate(key.id);
+			} else {
+				secondIntUpdate(key.id);
+			}
+		}
+		return displayUpdate(key.id);
+	});
+});
+console.log(document.getElementById("input").innerHTML);
+
+function firstIntUpdate(x) {
+	firstInt += x;
+}
+
+function secondIntUpdate(x) {
+	secondInt += x;
+}
+
+//function to update the display
+function displayUpdate (character) {
+	console.log(operatorCheck);
+	var display = document.getElementById("input").innerHTML;
+	if (display === 'Waiting for user input...') {
+		display = '';
+	}
+	if (operatorCheck) {
+		console.log('Pressed an operator');
+		document.getElementById("input").innerHTML = character;
+		return
+	}
+	display += character;
+	document.getElementById("input").innerHTML = display;
+}
+
 
 function clearCalculator () {
 	floatCheck = false;
 	firstInt = undefined;
 	secondInt = undefined;
 	operator = undefined;
+	operatorCheck = false;
 	// set #input innerHTML to "Waiting user input..."
+	document.getElementById("input").innerHTML = '';
 }
