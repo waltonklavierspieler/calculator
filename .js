@@ -1,3 +1,4 @@
+//arithmetic functions:
 function add(x, y) {
 	return x + y;
 }
@@ -43,7 +44,24 @@ function factorial (num) {
 }
 //operand function
 function evaluate (operand, x, y) {
-	return operand(x, y);
+	if (operand === 'multiply') {
+		return multiply (x, y);
+	}
+	if (operand === 'divide') {
+		return divide (x, y);
+	}
+	if (operand === 'add') {
+		return add (x, y);
+	}
+	if (operand === 'subtract') {
+		return subtract (x, y);
+	}
+	if (operand === '!') {
+		return factorial (x);
+	}
+	if (operand === 'exponent') {
+		return exponent (x, y);
+	}
 }
 
 /*
@@ -69,11 +87,14 @@ var operatorCheck = false;
 var firstInt = undefined;
 var secondInt = undefined;
 var operator = undefined;
+const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract', '+', 'X', '-', '/'];
+
 
 const calculatorButtons = document.querySelectorAll('.facePad');
 calculatorButtons.forEach(function (key) {
 	key.addEventListener('click', function() {
-		const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract'];
+		console.log('First Int is :' + firstInt);
+		console.log('Second Int is :' + secondInt);
 		const statementsArray = ['Input a number first.', 'ERROR: two operands in a row.', 'Must input a number first.'];
 		//check for display === whatever possible statements
 		if (statementsArray.includes(document.getElementById("input").innerHTML)) {
@@ -122,7 +143,6 @@ calculatorButtons.forEach(function (key) {
 			}
 			operatorCheck = true;
 			operator = key.id;
-			console.log("Operator is " + operator + "and the type is " + typeof(operator));
 			floatCheck = false;
 			displayUpdate(key.innerHTML);
 			return
@@ -133,9 +153,11 @@ calculatorButtons.forEach(function (key) {
 			if (!operatorCheck) {
 				firstIntUpdate(key.id);
 				displayUpdate(key.id);
+				return
 			} else {
 				secondIntUpdate(key.id);
 				displayUpdate(key.id);
+				return
 			}
 		}
 		//float check
@@ -147,32 +169,43 @@ calculatorButtons.forEach(function (key) {
 			}
 			if (!operatorCheck) {
 				firstIntUpdate(key.id);
+				floatCheck = true;
 			} else {
 				secondIntUpdate(key.id);
+				floatCheck = true;
 			}
 		}
 		return displayUpdate(key.id);
 	});
 });
-console.log(document.getElementById("input").innerHTML);
+//console.log(document.getElementById("input").innerHTML);
 
 function firstIntUpdate(x) {
+	if (firstInt === undefined) {
+		firstInt = ''
+	}
 	firstInt += x;
 }
 
 function secondIntUpdate(x) {
+	if (secondInt === undefined) {
+		secondInt = ''
+	}
 	secondInt += x;
 }
 
 //function to update the display
 function displayUpdate (character) {
-	console.log(operatorCheck);
 	var display = document.getElementById("input").innerHTML;
+	if (operatorArray.includes(display)) {
+		console.log('found');
+		document.getElementById("input").innerHTML = character;
+		return
+	}
 	if (display === 'Waiting for user input...') {
 		display = '';
 	}
-	if (operatorCheck) {
-		console.log('Pressed an operator');
+	if (operatorArray.includes(character)) {
 		document.getElementById("input").innerHTML = character;
 		return
 	}
