@@ -1,4 +1,4 @@
-//arithmetic functions:
+//arithmetic fuctions
 function add(x, y) {
 	return x + y;
 }
@@ -87,7 +87,7 @@ var operatorCheck = false;
 var firstInt = undefined;
 var secondInt = undefined;
 var operator = undefined;
-const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract', '+', 'X', '-', '/'];
+const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract', '+', 'x', '-', '/'];
 
 
 const calculatorButtons = document.querySelectorAll('.facePad');
@@ -120,11 +120,15 @@ calculatorButtons.forEach(function (key) {
 				if (floatCheck) {
 					var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
 					document.getElementById("input").innerHTML = result;
+					document.getElementById("resultField").innerHTML = result;
 					setTimeout(clearCalculator, 15000);
+					return
 				} else {
 					var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
 					document.getElementById("input").innerHTML = result;
+					document.getElementById("resultField").innerHTML = result;
 					setTimeout(clearCalculator, 15000);
+					return
 				}
 				return;
 			}
@@ -132,9 +136,32 @@ calculatorButtons.forEach(function (key) {
 		//cases for operand input
 		if (operatorArray.includes(key.id)) {
 			if (operatorCheck) {
-				document.getElementById("input").innerHTML = 'ERROR: two operands in a row.';
-				setTimeout(clearCalculator, 5000);
-				return
+				//insert a check here for if both ints are defined to execute the operand
+				//and assign the result to firstInt, operatorCheck to false, 2ndInt to undefined.
+				if (secondInt !== undefined) {
+					if (floatCheck) {
+						var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
+						displayUpdate('' + key.innerHTML);
+						//running total update;
+						headerDisplayUpdate(result);
+						firstInt = result;
+						secondInt = undefined;
+						return
+					} else {
+						var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
+						firstInt = result;
+						secondInt = undefined;
+						//running total update;
+						headerDisplayUpdate(result);
+						displayUpdate('' + key.innerHTML);
+						return
+					}
+				} else {
+					console.log('Operator check: ' + operatorCheck);
+					document.getElementById("input").innerHTML = 'ERROR: two operands in a row.';
+					setTimeout(clearCalculator, 5000);
+					return
+				}
 			}
 			if (firstInt === undefined) {
 				document.getElementById("input").innerHTML = 'Must input a number first.';
@@ -144,7 +171,7 @@ calculatorButtons.forEach(function (key) {
 			operatorCheck = true;
 			operator = key.id;
 			floatCheck = false;
-			displayUpdate(key.innerHTML);
+			displayUpdate(' ' + key.innerHTML);
 			return
 		}
 		//cases for integer input
@@ -153,6 +180,13 @@ calculatorButtons.forEach(function (key) {
 			if (!operatorCheck) {
 				firstIntUpdate(key.id);
 				displayUpdate(key.id);
+				return
+			}
+
+			if (secondInt === undefined){
+				console.log('starting 2nd Int. key.id: ' + key.id);
+				secondIntUpdate(key.id);
+				displayUpdate(' ' + key.id);
 				return
 			} else {
 				secondIntUpdate(key.id);
@@ -194,11 +228,17 @@ function secondIntUpdate(x) {
 	secondInt += x;
 }
 
-//function to update the display
+//function to update the displays
+function headerDisplayUpdate (character) {
+	var header = document.getElementById("resultField");
+	header.innerHTML = character;
+	return
+}
+
+
 function displayUpdate (character) {
 	var display = document.getElementById("input").innerHTML;
 	if (operatorArray.includes(display)) {
-		console.log('found');
 		document.getElementById("input").innerHTML = character;
 		return
 	}
@@ -222,4 +262,6 @@ function clearCalculator () {
 	operatorCheck = false;
 	// set #input innerHTML to "Waiting user input..."
 	document.getElementById("input").innerHTML = '';
+	document.getElementById("resultField").innerHTML = '&nbsp';
+
 }

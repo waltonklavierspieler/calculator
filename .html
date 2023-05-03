@@ -23,7 +23,7 @@
 
 	h2 {
 		display: flex;
-		justify-content: right;
+		justify-content: center;
 		font-size: 10px;
 		color: firebrick;
 		margin-right: 10px;
@@ -80,9 +80,10 @@
 
 	.numberField {
 		display: flex;
-		justify-content: space-around;
+		flex-direction: column;
+		justify-content: right;
 		align-items: flex-end;
-		height: 60px;
+		height: 90px;
 		margin-top: 20px;
 		margin-bottom: 15px;
 		margin-left: 10px;
@@ -90,16 +91,41 @@
 		border: 3px solid steelblue;
 		border-radius: 6px;
 		background-color: palegreen;
+		<!--font-size: 20px;
+		font-weight: bold;-->
+	}
+
+	p#input {
+		margin-right: 15px;
+		margin-block-end: 1px;
+		margin-block-start: 1px;
 		font-size: 20px;
 		font-weight: bold;
 	}
 
-	.operands {
+	p#resultField {
+		margin-right: 15px;
+		margin-block-end: 15px;
+		margin-block-start: 8px;
+		font-size: 25px;
+		font-weight: bold;
+	}
+
+	.operands1 {
 		display: flex;
 		justify-content: space-around;
 		margin-left: 4px;
 		margin-right: 4px;
 		margin-bottom: 2px;
+	}
+
+	.operands2 {
+		display: flex;
+		justify-content: space-around;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-top: 9px;
+		margin-bottom: 9px;
 	}
 
 	.\31 234 {
@@ -120,7 +146,7 @@
 		margin-bottom: 2px;
 	}
 
-	.\39 0\.c {
+	.\39 0\.\! {
 		display: flex;
 		justify-content: space-around;
 		margin-left: 4px;
@@ -135,7 +161,8 @@
 			<h2>by waltonklavierspieler @github</h2>
 		</h1>
 		<div class='numberField'>
-			<p id="input">Waiting user input...</p>
+			<p id="resultField">&nbsp</p>
+			<p id="input">Waiting for user input...</p>
 		</div>
 		<hr />
 		<div class='operands1'>
@@ -145,7 +172,7 @@
 		<div class='operands2'>
 			<button class='facePad facePadClick' id='add'>+</button>
 			<button class='facePad facePadClick' id='subtract'>-</button>
-			<button class='facePad facePadClick' id='multiply'>X</button>
+			<button class='facePad facePadClick' id='multiply'>x</button>
 			<button class='facePad facePadClick' id='divide'>/</button>
 		</div>
 		<div class='1234'>
@@ -167,6 +194,5 @@
 			<button class='facePad facePadClick' id='!'>!</button>
 		</div>
 	</div>
-<script src="calculator.js"></script>
 </body>
 </html>
