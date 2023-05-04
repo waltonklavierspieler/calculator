@@ -1,4 +1,4 @@
-//arithmetic fuctions
+//arithmetic functions:
 function add(x, y) {
 	return x + y;
 }
@@ -87,14 +87,14 @@ var operatorCheck = false;
 var firstInt = undefined;
 var secondInt = undefined;
 var operator = undefined;
+var stringOfOperatorsCheck = false;
 const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract', '+', 'x', '-', '/'];
 
 
 const calculatorButtons = document.querySelectorAll('.facePad');
 calculatorButtons.forEach(function (key) {
 	key.addEventListener('click', function() {
-		console.log('First Int is :' + firstInt);
-		console.log('Second Int is :' + secondInt);
+		console.log('Key.id: ' + key.id + '. type: ' + typeof(parseInt(key.id)));
 		const statementsArray = ['Input a number first.', 'ERROR: two operands in a row.', 'Must input a number first.'];
 		//check for display === whatever possible statements
 		if (statementsArray.includes(document.getElementById("input").innerHTML)) {
@@ -109,25 +109,28 @@ calculatorButtons.forEach(function (key) {
 		if (key.id === '=') {
 			if (firstInt === undefined) {
 				document.getElementById("input").innerHTML = 'Input a number first.';
-				setTimeout(clearCalculator, 5000);
+				setTimeout(clearCalculator, 3000);
 				return
 			}
 			if (secondInt === undefined) {
+				stringOfOperatorsCheck = true;
 				return firstInt;
-				setTimeout(clearCalculator, 5000);
-				return
 			} else {
-				if (floatCheck) {
+				if (firstInt.includes('.') || secondInt.includes('.')) {
 					var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
+					result = result.toFixed(3);
+					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML;
 					document.getElementById("input").innerHTML = result;
-					document.getElementById("resultField").innerHTML = result;
-					setTimeout(clearCalculator, 15000);
+					firstInt = result;
+
+				stringOfOperatorsCheck = true;
 					return
 				} else {
 					var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
+					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML;
 					document.getElementById("input").innerHTML = result;
-					document.getElementById("resultField").innerHTML = result;
-					setTimeout(clearCalculator, 15000);
+					firstInt = result;
+					stringOfOperatorsCheck = true;
 					return
 				}
 				return;
@@ -141,19 +144,25 @@ calculatorButtons.forEach(function (key) {
 				if (secondInt !== undefined) {
 					if (floatCheck) {
 						var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
-						displayUpdate('' + key.innerHTML);
+						result = result.toFixed(3);
+						displayUpdate(' ' + key.innerHTML);
+						displayLengthCheck();
 						//running total update;
-						headerDisplayUpdate(result);
+						//headerDisplayUpdate(document.getElementById("input").innerHTML);
 						firstInt = result;
 						secondInt = undefined;
+						operator = key.id;
 						return
 					} else {
 						var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
+						result = result.toFixed(3);
+						//headerDisplayUpdate(document.getElementById("input").innerHTML);
 						firstInt = result;
 						secondInt = undefined;
+						operator = key.id;
 						//running total update;
-						headerDisplayUpdate(result);
-						displayUpdate('' + key.innerHTML);
+						displayUpdate(' ' + key.innerHTML);
+						displayLengthCheck();
 						return
 					}
 				} else {
@@ -172,43 +181,56 @@ calculatorButtons.forEach(function (key) {
 			operator = key.id;
 			floatCheck = false;
 			displayUpdate(' ' + key.innerHTML);
+			displayLengthCheck();
 			return
 		}
+		//float check
+		if (key.id === ".") {
+			console.log('decimal');
+			if (floatCheck === true) {
+				document.getElementById("input").innerHTML = "Too many decimals."
+				setTimeout(clearCalculator, 2000);
+				return
+			}
+			if (!operatorCheck) {
+				firstIntUpdate(key.id);
+				displayUpdate(key.id);
+				displayLengthCheck();
+				floatCheck = true;
+				return
+			} else {
+				secondIntUpdate(key.id);
+				displayUpdate(key.id);
+				displayLengthCheck();
+				floatCheck = true;
+				return
+			}
+
+		}
+
 		//cases for integer input
 		if (typeof(parseInt(key.id)) === 'number') {
 			//in case of !operatorCheck
 			if (!operatorCheck) {
 				firstIntUpdate(key.id);
 				displayUpdate(key.id);
+				displayLengthCheck();
 				return
 			}
 
 			if (secondInt === undefined){
-				console.log('starting 2nd Int. key.id: ' + key.id);
 				secondIntUpdate(key.id);
 				displayUpdate(' ' + key.id);
+				displayLengthCheck();
 				return
 			} else {
 				secondIntUpdate(key.id);
 				displayUpdate(key.id);
+				displayLengthCheck();
 				return
 			}
 		}
-		//float check
-		if (key.id === '.') {
-			if (floatCheck === true) {
-				document.getElementById("input").innerHTML = "Too many decimals."
-				setTimeout(clearCalculator, 5000);
-				return
-			}
-			if (!operatorCheck) {
-				firstIntUpdate(key.id);
-				floatCheck = true;
-			} else {
-				secondIntUpdate(key.id);
-				floatCheck = true;
-			}
-		}
+
 		return displayUpdate(key.id);
 	});
 });
@@ -231,12 +253,18 @@ function secondIntUpdate(x) {
 //function to update the displays
 function headerDisplayUpdate (character) {
 	var header = document.getElementById("resultField");
-	header.innerHTML = character;
+	header.innerHTML += character;
 	return
 }
 
-
-function displayUpdate (character) {
+function displayLengthCheck () {
+	var display = document.getElementById("input").innerHTML;
+	if (display.length >= 18) {
+	document.getElementById("input").innerHTML = '...' + display.slice(3);
+	return
+	}
+}
+function displayUpdate (character, multipleOpsCheck) {
 	var display = document.getElementById("input").innerHTML;
 	if (operatorArray.includes(display)) {
 		document.getElementById("input").innerHTML = character;
@@ -245,14 +273,17 @@ function displayUpdate (character) {
 	if (display === 'Waiting for user input...') {
 		display = '';
 	}
-	if (operatorArray.includes(character)) {
+	/*if (operatorArray.includes(character)) {
 		document.getElementById("input").innerHTML = character;
 		return
-	}
+	} */
+	/*if (multipleOpsCheck) {
+		display = character;
+		return;
+	}*/
 	display += character;
 	document.getElementById("input").innerHTML = display;
 }
-
 
 function clearCalculator () {
 	floatCheck = false;
