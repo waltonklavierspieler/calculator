@@ -64,117 +64,98 @@ function evaluate (operand, x, y) {
 	}
 }
 
-/*
-logic:
-create an event listener for each button that returns the id tag as a string
-check if int or if operand; if so, append as string to firstInt;
-	check if '.' is the input; if so turn variable floatCheck to true
-		while true, future checks for '.' throw an error; run clear function
-	check if operator === undefined;
-	continue to do this until event listener returns an operand sign
-	while operator!== undefined,
-		continue to check for ints and '.', this times appending to secondInt
-		check for '=' input
-			if input === '=' convert firstInt and secondInt to floats;
-			input to operate function
-
-update every output to the display
-*/
-
-//three variables to store the different input integers and the operand;
+// variables to store the different input integers and the operand;
 var floatCheck = false;
 var operatorCheck = false;
 var firstInt = undefined;
 var secondInt = undefined;
 var operator = undefined;
-var stringOfOperatorsCheck = false;
+var equalRun = false;
 const operatorArray = ['multiply', 'divide', '!', 'add', 'subtract', '+', 'x', '-', '/'];
 
 
 const calculatorButtons = document.querySelectorAll('.facePad');
 calculatorButtons.forEach(function (key) {
 	key.addEventListener('click', function() {
-		console.log('Key.id: ' + key.id + '. type: ' + typeof(parseInt(key.id)));
-		const statementsArray = ['Input a number first.', 'ERROR: two operands in a row.', 'Must input a number first.'];
+		const statementsArray = ['Input a number first.', 'ERROR',
+								'Too many decimals.', 'U R Cute'];
 		//check for display === whatever possible statements
 		if (statementsArray.includes(document.getElementById("input").innerHTML)) {
 			clearCalculator();
+		}
+		if (key.id === ':)') {
+			document.getElementById("input").innerHTML = 'U R Cute';
+			return;
 		}
 		//check for clear button
 		if (key.id === 'C') {
 			clearCalculator();
 			return
 		}
+		if (equalRun) {
+			if (!operatorArray.includes(key.id)) {
+				clearCalculator();
+			}
+			equalRun = false;
+		}
 		//check for = button
 		if (key.id === '=') {
 			if (firstInt === undefined) {
 				document.getElementById("input").innerHTML = 'Input a number first.';
-				setTimeout(clearCalculator, 3000);
 				return
 			}
 			if (secondInt === undefined) {
-				stringOfOperatorsCheck = true;
 				return firstInt;
 			} else {
 				if (firstInt.includes('.') || secondInt.includes('.')) {
 					var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
-					result = result.toFixed(3);
-					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML;
+					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML + ' =';
 					document.getElementById("input").innerHTML = result;
 					firstInt = result;
-
-				stringOfOperatorsCheck = true;
+					equalRun = true;
 					return
 				} else {
 					var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
-					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML;
+					document.getElementById("resultField").innerHTML = document.getElementById("input").innerHTML + ' =';
 					document.getElementById("input").innerHTML = result;
 					firstInt = result;
-					stringOfOperatorsCheck = true;
+					equalRun = true;
 					return
 				}
 				return;
 			}
 		}
-		//cases for operand input
 		if (operatorArray.includes(key.id)) {
 			if (operatorCheck) {
-				//insert a check here for if both ints are defined to execute the operand
-				//and assign the result to firstInt, operatorCheck to false, 2ndInt to undefined.
 				if (secondInt !== undefined) {
 					if (floatCheck) {
 						var result = evaluate (operator, parseFloat(firstInt), parseFloat(secondInt));
 						result = result.toFixed(3);
 						displayUpdate(' ' + key.innerHTML);
 						displayLengthCheck();
-						//running total update;
-						//headerDisplayUpdate(document.getElementById("input").innerHTML);
 						firstInt = result;
 						secondInt = undefined;
 						operator = key.id;
+						stringOfOperatorsCheck = true;
 						return
 					} else {
 						var result = evaluate (operator, parseInt(firstInt), parseInt(secondInt));
 						result = result.toFixed(3);
-						//headerDisplayUpdate(document.getElementById("input").innerHTML);
 						firstInt = result;
 						secondInt = undefined;
 						operator = key.id;
-						//running total update;
 						displayUpdate(' ' + key.innerHTML);
 						displayLengthCheck();
+						stringOfOperatorsCheck = true;
 						return
 					}
 				} else {
-					console.log('Operator check: ' + operatorCheck);
-					document.getElementById("input").innerHTML = 'ERROR: two operands in a row.';
-					setTimeout(clearCalculator, 5000);
+					document.getElementById("input").innerHTML = 'ERROR';
 					return
 				}
 			}
 			if (firstInt === undefined) {
-				document.getElementById("input").innerHTML = 'Must input a number first.';
-				setTimeout(clearCalculator, 5000);
+				document.getElementById("input").innerHTML = 'Input a number first.';
 				return;
 			}
 			operatorCheck = true;
@@ -186,7 +167,6 @@ calculatorButtons.forEach(function (key) {
 		}
 		//float check
 		if (key.id === ".") {
-			console.log('decimal');
 			if (floatCheck === true) {
 				document.getElementById("input").innerHTML = "Too many decimals."
 				setTimeout(clearCalculator, 2000);
@@ -234,7 +214,6 @@ calculatorButtons.forEach(function (key) {
 		return displayUpdate(key.id);
 	});
 });
-//console.log(document.getElementById("input").innerHTML);
 
 function firstIntUpdate(x) {
 	if (firstInt === undefined) {
@@ -259,8 +238,9 @@ function headerDisplayUpdate (character) {
 
 function displayLengthCheck () {
 	var display = document.getElementById("input").innerHTML;
+	var length = display.length;
 	if (display.length >= 18) {
-	document.getElementById("input").innerHTML = '...' + display.slice(3);
+	document.getElementById("input").innerHTML = '...' + display.slice(length - 16);
 	return
 	}
 }
@@ -273,14 +253,6 @@ function displayUpdate (character, multipleOpsCheck) {
 	if (display === 'Waiting for user input...') {
 		display = '';
 	}
-	/*if (operatorArray.includes(character)) {
-		document.getElementById("input").innerHTML = character;
-		return
-	} */
-	/*if (multipleOpsCheck) {
-		display = character;
-		return;
-	}*/
 	display += character;
 	document.getElementById("input").innerHTML = display;
 }
@@ -291,6 +263,7 @@ function clearCalculator () {
 	secondInt = undefined;
 	operator = undefined;
 	operatorCheck = false;
+	equalRun = false;
 	// set #input innerHTML to "Waiting user input..."
 	document.getElementById("input").innerHTML = '';
 	document.getElementById("resultField").innerHTML = '&nbsp';
